@@ -1,0 +1,82 @@
+﻿@page "/"
+
+<div>
+    <h3>Department</h3>
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" placeholder="Insert your name" @bind-value="department.Name"/>
+    </div>
+    <button class="btn btn-light" @onclick="PostDepartment">Save</button>
+</div>
+
+@if (Departments != null && Departments.Count > 0)
+{
+<div>
+    <h3>Employee</h3>
+
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" placeholder="Insert your name" @bind-value="employees.Name" />
+    </div>
+    <div class="form-group">
+        <label>Gender</label>
+        <select @bind="employees.Gender">
+            <option>None</option>
+            <option value="@BLL.Genders.Male">Male</option>
+            <option value="@BLL.Genders.Female">Female</option>
+        </select>
+
+    </div>
+    <div class="form-group">
+        <label>Address</label>
+        <input type="text" placeholder="Insert your name" @bind-value="employees.Adderss" />
+    </div>
+    <div class="form-group">
+        <label>Department</label>
+        <select @bind="employees.DepartmentID">
+            @foreach (var item in Departments)
+            {
+                <option value="@item.ID">@item.Name</option>
+            }
+        </select>
+    </div>
+    <button class="btn btn-light" @onclick="PostEmployee">Save</button>
+</div>
+
+}
+
+@code  {
+
+    public BLL.Employee employees { get; set; }
+
+    public BLL.Department department { get; set; }
+    public List<BLL.Department> Departments;
+    protected async override Task OnInitializedAsync()
+    {
+        employees = new BLL.Employee();
+        department = new BLL.Department();
+        var responseMessage = await client.GetAsync("https://localhost:44399/api/Departments");
+        var result = await responseMessage.Content.ReadAsAsync<List<BLL.Department>>();
+        Departments = result;
+        base.OnInitializedAsync();
+    }
+
+    public async Task PostDepartment()
+    {
+        var responseMessage = await client.PostAsJsonAsync("https://localhost:44399/api/Departments", department);
+        if (responseMessage.StatusCode == System.Net.HttpStatusCode.Created)
+        {
+            StateHasChanged();
+        }
+    }
+
+    public async Task PostEmployee()
+    {
+        var responseMessage = await client.PostAsJsonAsync("https://localhost:44399/api/Employees", employees);
+        if (responseMessage.StatusCode == System.Net.HttpStatusCode.Created)
+        {
+
+        }
+
+    }
+}
