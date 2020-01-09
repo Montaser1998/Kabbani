@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Kabbani.Data;
 using System.Net.Http;
+using Blazor.FileReader;
 
 namespace Kabbani
 {
@@ -29,6 +30,7 @@ namespace Kabbani
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddFileReaderService(options => options.InitializeOnFirstCall = true);
             services.AddSingleton<HttpClient>();
             services.AddSingleton<WeatherForecastService>();
         }

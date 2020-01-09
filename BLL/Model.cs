@@ -7,6 +7,7 @@ namespace BLL
 	{
 		public Guid ID { get; set; }
 		public string Name { get; set; }
+		public byte[] Image { get; set; }
 		public Genders Gender { get; set; }
 		public string Adderss { get; set; }
 		public Guid DepartmentID { get; set; }
